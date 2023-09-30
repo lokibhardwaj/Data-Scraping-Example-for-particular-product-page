@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page Title</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script>
+        $( document ).ready(function() {
+            $('#save_data').val(0);
+            $("#display-output").click(function () {
+                $('.output-container').html('<img src="loading.gif" width="200px" />');
+                var main_url = $('#main_url').val();
+                var save_data = $('#save_data').val();
+                $.post("scraper.php",
+                    {
+                        main_url: main_url,
+                        save_data: save_data
+                    },
+                    function (data, status) {
+                        console.log("Data: " + data + "\nStatus: " + status);
+                        if(status == 'success'){
+                            $('.output-container').html(data);
+                            $('#save_data').val(1);
+                            $("#display-output").html('Save output to database')
+                        }
+
+                    });
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div class="card px-5 py-5" id="form1">
+                    <div class="form-data">
+                        <div class="forms-inputs mb-4"> <span>Main Url</span> <input type="text" name="main_url" id="main_url"
+                                placeholder="Enter Url">
+                            <div class="invalid-feedback">A valid email is required!</div>
+                        </div>
+                        <div class="mb-3"> <button id="display-output"  class="btn btn-dark w-100">Show Output</button> </div>
+                    </div>
+                    <div class="success-data">
+                        <input type="hidden" name="save_data" id="save_data" value="0" autocomplete="off">
+                        <div class="text-center d-flex flex-column"> <div class="text-center fs-1 output-container"></div> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
